@@ -64,7 +64,7 @@ action :create do
         subscribes :create, resources(:execute => "lxc create[#{new_resource.name}]"), :immediately
       end
 
-      if node[:lxc][:copy_data_bag_secret_file]
+      if new_resource.copy_data_bag_secret_file
         data_bag_secret_file = Chef::EncryptedDataBagItem::DEFAULT_SECRET_FILE
 
         if ::File.readable?(data_bag_secret_file)

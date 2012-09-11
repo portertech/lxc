@@ -10,7 +10,6 @@ default[:lxc][:dhcp_range] = '10.0.3.2,10.0.3.254'
 default[:lxc][:dhcp_max] = '253'
 default[:lxc][:shutdown_timeout] = 120
 default[:lxc][:allowed_types] = %w(debian ubuntu fedora)
-default[:lxc][:copy_data_bag_secret_file] = false
 
 default[:lxc][:knife] = {}
 default[:lxc][:knife][:static_range] = ''
