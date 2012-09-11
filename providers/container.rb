@@ -63,6 +63,22 @@ action :create do
         action :nothing
         subscribes :create, resources(:execute => "lxc create[#{new_resource.name}]"), :immediately
       end
+
+      if node[:lxc][:copy_data_bag_secret_file]
+        data_bag_secret_file = Chef::EncryptedDataBagItem::DEFAULT_SECRET_FILE
+
+        if ::File.readable?(data_bag_secret_file)
+          file "lxc chef-data-bag-secret[#{new_resource.name}]" do
+            path "/var/lib/lxc/#{new_resource.name}/rootfs/etc/chef/encrypted_data_bag_secret"
+            content(::File.open(data_bag_secret_file, "rb").read)
+            mode 0600
+            action :nothing
+            subscribes :create, resources(:execute => "lxc create[#{new_resource.name}]"), :immediately
+          end
+        else
+          Chef::Log.warn("Could not read #{data_bag_secret_file}")
+        end
+      end
     end
 
     ruby_block "lxc start[#{new_resource.name}]" do
